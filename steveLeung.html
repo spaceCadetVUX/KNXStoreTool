@@ -219,6 +219,33 @@
             justify-content: center;
         }
 
+                /* Your specific color: #25486e */
+
+        /* Solid Button Style */
+        .btn-custom-navy {
+            background-color: #25486e;
+            border-color: #25486e;
+            color: white;
+        }
+        .btn-custom-navy:hover {
+            background-color: #1c3652; /* Slightly darker for hover effect */
+            border-color: #1c3652;
+            color: white;
+        }
+
+        /* Outline Button Style */
+        .btn-outline-custom-navy {
+            color: #25486e;
+            border-color: #25486e;
+            background-color: transparent;
+        }
+        .btn-outline-custom-navy:hover {
+            background-color: #25486e;
+            color: white;
+        }
+
+
+
         /* Scrollbar */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -270,7 +297,12 @@
                                         <div id="hero-icons" class="position-absolute top-0 start-0 w-100 h-100 pe-none"></div>
                                     </div>
 
-                                    <div class="hero-details text-center pt-2">
+                                    
+                                </div>
+                            </div>
+                            
+                            <hr class="my-4 opacity-10">
+                            <div class="hero-details text-center pt-2">
                                         <h2 class="hero-brand h6 fw-bold mb-1 text-dark">Moorgen Steve Leung series</h2>
                                         <div class="d-flex justify-content-center gap-2 text-muted" style="font-size: 0.7rem; text-transform: uppercase; font-weight: 600;">
                                             <span class="hero-color">Color: Snowflake Silver</span>
@@ -278,10 +310,6 @@
                                             <span class="hero-protocol">Note: no details</span>
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-                            
-                            <hr class="my-4 opacity-10">
 
                             <div class="mb-4">
                                 <p class="small fw-bold text-muted text-uppercase mb-3">Select Finish</p>
@@ -360,20 +388,21 @@
                                                 <div class="col"><button class="icon-btn w-100 rounded-3 shadow-sm"><span class="material-symbols-outlined fs-4">coffee</span></button></div>
                                             </div>
                                         </div>
-                                        
+                                        <!-- HIDE -->
+                                        <div style="display: none;">
                                         <div class="font-options">
                                             <label class="small fw-bold text-uppercase text-muted mb-2 d-block">Icon Thickness</label>
                                             <div class="d-flex flex-wrap gap-1 p-1 bg-light rounded-3 border">
-                                                <input type="radio" class="btn-check" name="icon-weight" id="weight-100" value="100">
+                                                <input type="radio" class="btn-check" name="icon-weight" id="weight-100" value="100" checked>
                                                 <label class="btn btn-sm btn-outline-secondary border-0 flex-fill rounded" for="weight-100">100</label>
 
-                                                <input type="radio" class="btn-check" name="icon-weight" id="weight-200" value="200">
+                                                <input type="radio" class="btn-check" name="icon-weight" id="weight-200" value="200" >
                                                 <label class="btn btn-sm btn-outline-secondary border-0 flex-fill rounded" for="weight-200">200</label>
 
                                                 <input type="radio" class="btn-check" name="icon-weight" id="weight-300" value="300">
                                                 <label class="btn btn-sm btn-outline-secondary border-0 flex-fill rounded" for="weight-300">300</label>
 
-                                                <input type="radio" class="btn-check" name="icon-weight" id="weight-400" value="400" checked>
+                                                <input type="radio" class="btn-check" name="icon-weight" id="weight-400" value="400">
                                                 <label class="btn btn-sm btn-outline-secondary border-0 flex-fill rounded" for="weight-400">400</label>
 
                                                 <input type="radio" class="btn-check" name="icon-weight" id="weight-500" value="500">
@@ -382,15 +411,16 @@
                         
                                             </div>
                                         </div>
+                                        </div>
 
                                         <div class="mt-auto">
-                                            <button id="export-btn" class="btn btn-primary w-100 py-3 shadow-sm btn-transition d-flex align-items-center justify-content-center gap-2">
+                                            <!-- <button id="export-btn" class="btn btn-primary w-100 py-3 shadow-sm btn-transition d-flex align-items-center justify-content-center gap-2">
                                                 <span class="material-symbols-outlined fs-5">download</span> Export
-                                            </button>
+                                            </button> -->
 
                                             <div class="d-grid gap-2">
-                                                <button id="export-svg-btn" class="btn btn-outline-dark w-100 py-2 mt-2 shadow-sm">Export SVG</button>
-                                                <button id="export-pdf-btn" class="btn btn-outline-secondary w-100 py-2 shadow-sm">Save PDF</button>
+                                                <button id="export-svg-btn" class="btn btn-outline-custom-navy flex-fill py-2 shadow-sm">Export SVG</button>
+                                                <button id="export-pdf-btn" class="btn btn-primary w-100 py-3 shadow-sm btn-transition d-flex align-items-center justify-content-center gap-2">Save PDF</button>
                                             </div>
 
                                             
@@ -419,15 +449,15 @@
                                                 <label class="small fw-bold text-muted d-block mb-1">Weight</label>
                                                 <select class="form-select form-select-sm" id="mobile-single-weight-select" onchange="document.getElementById('s-weight-'+this.value).click()">
                                                     <option value="100">Thin</option>
-                                                    <option value="300">Light</option>
-                                                    <option value="400" selected>Regular</option>
+                                                    <option value="300" selected>Light</option>
+                                                    <option value="400" >Regular</option>
                                                     <option value="500">Medium</option>
                                                     <option value="700">Bold</option>
                                                 </select>
                                                 <div id="single-text-weight-selector" class="d-none">
                                                     <input type="radio" name="single-text-weight" id="s-weight-100" value="100">
-                                                    <input type="radio" name="single-text-weight" id="s-weight-300" value="300">
-                                                    <input type="radio" name="single-text-weight" id="s-weight-400" value="400" checked>
+                                                    <input type="radio" name="single-text-weight" id="s-weight-300" value="300" checked>
+                                                    <input type="radio" name="single-text-weight" id="s-weight-400" value="400">
                                                     <input type="radio" name="single-text-weight" id="s-weight-500" value="500">
                                                     <input type="radio" name="single-text-weight" id="s-weight-700" value="700">
                                                 </div>
@@ -435,15 +465,15 @@
                                             <div class="col-6">
                                                 <label class="small fw-bold text-muted d-block mb-1">Size</label>
                                                 <select class="form-select form-select-sm" id="mobile-single-size-select" onchange="document.getElementById('s-size-'+this.value).click()">
-                                                    <option value="xs">XS</option>
-                                                    <option value="sm" selected>Small</option>
+                                                    <option value="xs"selected>XS</option>
+                                                    <option value="sm">Small</option>
                                                     <option value="base">Medium</option>
                                                     <option value="lg">Large</option>
                                                     <option value="xl">XL</option>
                                                 </select>
                                                 <div id="single-text-size-selector" class="d-none">
-                                                    <input type="radio" name="single-text-size" id="s-size-xs" value="text-xs">
-                                                    <input type="radio" name="single-text-size" id="s-size-sm" value="text-sm" checked>
+                                                    <input type="radio" name="single-text-size" id="s-size-xs" value="text-xs"checked>
+                                                    <input type="radio" name="single-text-size" id="s-size-sm" value="text-sm">
                                                     <input type="radio" name="single-text-size" id="s-size-base" value="text-base">
                                                     <input type="radio" name="single-text-size" id="s-size-lg" value="text-lg">
                                                     <input type="radio" name="single-text-size" id="s-size-xl" value="text-xl">
@@ -452,10 +482,10 @@
                                         </div>
                                         
                                         <div class="mt-2">
-                                            <button id="export-single-btn" class="btn btn-primary w-100 py-3 shadow-sm">Export</button>
+                                            <!-- <button id="export-single-btn" class="btn btn-primary w-100 py-3 shadow-sm">Export</button> -->
                                         <div class="d-grid gap-2">
-                                            <button id="export-single-svg-btn" class="btn btn-outline-dark w-100 py-2 mt-2 shadow-sm">Export SVG</button>
-                                            <button id="export-single-pdf-btn" class="btn btn-outline-secondary w-100 py-2 shadow-sm">Save PDF</button>
+                                            <button id="export-single-svg-btn" class="btn btn-outline-custom-navy flex-fill py-2 shadow-sm">Export SVG</button>
+                                            <button id="export-single-pdf-btn" class="btn btn-primary w-100 py-3 shadow-sm btn-transition d-flex align-items-center justify-content-center gap-2">Save PDF</button>
                                         </div>
                                         </div>
                                     </div>
@@ -465,41 +495,91 @@
                                     <div class="d-flex flex-column gap-3">
                                         
                                         <div>
-                                            <label class="small fw-bold text-uppercase text-muted mb-2 d-block">Labels (16 Lines)</label>
+                                            <label class="small fw-bold text-uppercase text-muted mb-2 d-block">Labels (Max 8 chars)</label>
                                             <div id="double-line-tab" class="row row-cols-2 g-2">
-                                                <div class="col"><input type="text" id="double-input-1" class="form-control form-control-sm text-center" placeholder="L1" value="Living"></div>
-                                                <div class="col"><input type="text" id="double-input-2" class="form-control form-control-sm text-center" placeholder="L2" value="Room"></div>
-                                                <div class="col"><input type="text" id="double-input-3" class="form-control form-control-sm text-center" placeholder="L3" value="Dining"></div>
-                                                <div class="col"><input type="text" id="double-input-4" class="form-control form-control-sm text-center" placeholder="L4" value="Area"></div>
-                                                <div class="col"><input type="text" id="double-input-5" class="form-control form-control-sm text-center" placeholder="L5" value="Master"></div>
-                                                <div class="col"><input type="text" id="double-input-6" class="form-control form-control-sm text-center" placeholder="L6" value="Bed"></div>
-                                                <div class="col"><input type="text" id="double-input-7" class="form-control form-control-sm text-center" placeholder="L7" value="Guest"></div>
-                                                <div class="col"><input type="text" id="double-input-8" class="form-control form-control-sm text-center" placeholder="L8" value="Room"></div>
-                                                <div class="col"><input type="text" id="double-input-9" class="form-control form-control-sm text-center" placeholder="L9" value="Bath"></div>
-                                                <div class="col"><input type="text" id="double-input-10" class="form-control form-control-sm text-center" placeholder="L10" value="Room"></div>
-                                                <div class="col"><input type="text" id="double-input-11" class="form-control form-control-sm text-center" placeholder="L11" value="Table"></div>
-                                                <div class="col"><input type="text" id="double-input-12" class="form-control form-control-sm text-center" placeholder="L12" value="Light"></div>
-                                                <div class="col"><input type="text" id="double-input-13" class="form-control form-control-sm text-center" placeholder="L13" value="Spot"></div>
-                                                <div class="col"><input type="text" id="double-input-14" class="form-control form-control-sm text-center" placeholder="L14" value="Light"></div>
-                                                <div class="col"><input type="text" id="double-input-15" class="form-control form-control-sm text-center" placeholder="L15" value="All"></div>
-                                                <div class="col"><input type="text" id="double-input-16" class="form-control form-control-sm text-center" placeholder="L16" value="Off"></div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-1" class="form-control form-control-sm text-center" 
+                                                        placeholder="L1" value="Living" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-2" class="form-control form-control-sm text-center" 
+                                                        placeholder="L2" value="Room" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-3" class="form-control form-control-sm text-center" 
+                                                        placeholder="L3" value="Dining" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-4" class="form-control form-control-sm text-center" 
+                                                        placeholder="L4" value="Area" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-5" class="form-control form-control-sm text-center" 
+                                                        placeholder="L5" value="Master" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-6" class="form-control form-control-sm text-center" 
+                                                        placeholder="L6" value="Bed" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-7" class="form-control form-control-sm text-center" 
+                                                        placeholder="L7" value="Guest" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-8" class="form-control form-control-sm text-center" 
+                                                        placeholder="L8" value="Room" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-9" class="form-control form-control-sm text-center" 
+                                                        placeholder="L9" value="Bath" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-10" class="form-control form-control-sm text-center" 
+                                                        placeholder="L10" value="Room" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-11" class="form-control form-control-sm text-center" 
+                                                        placeholder="L11" value="Table" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-12" class="form-control form-control-sm text-center" 
+                                                        placeholder="L12" value="Light" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-13" class="form-control form-control-sm text-center" 
+                                                        placeholder="L13" value="Spot" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-14" class="form-control form-control-sm text-center" 
+                                                        placeholder="L14" value="Light" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-15" class="form-control form-control-sm text-center" 
+                                                        placeholder="L15" value="All" maxlength="8">
+                                                </div>
+                                                <div class="col">
+                                                    <input type="text" id="double-input-16" class="form-control form-control-sm text-center" 
+                                                        placeholder="L16" value="Off" maxlength="8">
+                                                </div>
                                             </div>
                                         </div>
 
+                                        <!-- HIDE -->
+                                        <div style="display: none;">
                                         <div class="row g-2">
                                             <div class="col-6">
                                                  <label class="small fw-bold text-muted d-block mb-1">Weight</label>
                                                  <select class="form-select form-select-sm" onchange="document.getElementById('d-weight-'+this.value).click()">
                                                     <option value="100">Thin</option>
-                                                    <option value="300">Light</option>
-                                                    <option value="400" selected>Regular</option>
+                                                    <option value="300" selected>Light</option>
+                                                    <option value="400">Regular</option>
                                                     <option value="500">Medium</option>
                                                     <option value="700">Bold</option>
                                                 </select>
                                                 <div id="double-text-weight-selector" class="d-none">
                                                     <input type="radio" name="double-text-weight" id="d-weight-100" value="100">
-                                                    <input type="radio" name="double-text-weight" id="d-weight-300" value="300">
-                                                    <input type="radio" name="double-text-weight" id="d-weight-400" value="400" checked>
+                                                    <input type="radio" name="double-text-weight" id="d-weight-300" value="300" checked>
+                                                    <input type="radio" name="double-text-weight" id="d-weight-400" value="400">
                                                     <input type="radio" name="double-text-weight" id="d-weight-500" value="500">
                                                     <input type="radio" name="double-text-weight" id="d-weight-700" value="700">
                                                 </div>
@@ -507,27 +587,28 @@
                                             <div class="col-6">
                                                 <label class="small fw-bold text-muted d-block mb-1">Size</label>
                                                 <select class="form-select form-select-sm" onchange="document.getElementById('d-size-'+this.value).click()">
-                                                    <option value="xs">XS</option>
-                                                    <option value="sm" selected>Small</option>
+                                                    <option value="xs"selected>XS</option>
+                                                    <option value="sm">Small</option>
                                                     <option value="base">Medium</option>
                                                     <option value="lg">Large</option>
                                                     <option value="xl">XL</option>
                                                 </select>
                                                 <div id="double-text-size-selector" class="d-none">
-                                                    <input type="radio" name="double-text-size" id="d-size-xs" value="text-xs">
-                                                    <input type="radio" name="double-text-size" id="d-size-sm" value="text-sm" checked>
+                                                    <input type="radio" name="double-text-size" id="d-size-xs" value="text-xs" checked>
+                                                    <input type="radio" name="double-text-size" id="d-size-sm" value="text-sm">
                                                     <input type="radio" name="double-text-size" id="d-size-base" value="text-base">
                                                     <input type="radio" name="double-text-size" id="d-size-lg" value="text-lg">
                                                     <input type="radio" name="double-text-size" id="d-size-xl" value="text-xl">
                                                 </div>
                                             </div>
                                         </div>
+                                        </div>
 
                                         <div class="mt-2">
-                                            <button id="export-dual-btn" class="btn btn-primary w-100 py-3 shadow-sm">Export</button>
+                                            <!-- <button id="export-dual-btn" class="btn btn-primary w-100 py-3 shadow-sm">Export</button> -->
                                         <div class="d-grid gap-2">
-                                            <button id="export-dual-svg-btn" class="btn btn-outline-dark w-100 py-2 mt-2 shadow-sm">Export SVG</button>
-                                            <button id="export-dual-pdf-btn" class="btn btn-outline-secondary w-100 py-2 shadow-sm">Save PDF</button>
+                                            <button id="export-dual-svg-btn" class="btn btn-outline-custom-navy flex-fill py-2 shadow-sm">Export SVG</button>
+                                            <button id="export-dual-pdf-btn" class="btn btn-primary w-100 py-3 shadow-sm btn-transition d-flex align-items-center justify-content-center gap-2">Save PDF</button>
                                         </div>
                                         </div>
                                     </div>

@@ -391,17 +391,10 @@
 
                                                 <input type="radio" class="btn-check" name="icon-weight" id="weight-400" value="400" checked>
                                                 <label class="btn btn-sm btn-outline-secondary border-0 flex-fill rounded" for="weight-400">400</label>
-
-                                                <input type="radio" class="btn-check" name="icon-weight" id="weight-500" value="500">
-                                                <label class="btn btn-sm btn-outline-secondary border-0 flex-fill rounded" for="weight-500">500</label>
-
                                             </div>
                                         </div>
 
                                         <div class="mt-auto">
-                                            <button id="export-btn" class="btn btn-primary w-100 py-3 shadow-sm btn-transition d-flex align-items-center justify-content-center gap-2">
-                                                <span class="material-symbols-outlined fs-5">download</span> Export
-                                            </button>
                                             <div class="d-grid gap-2">
                                                 <button id="export-svg-btn" class="btn btn-outline-dark w-100 py-2 mt-2 shadow-sm">Export SVG</button>
                                                 <button id="export-pdf-btn" class="btn btn-outline-secondary w-100 py-2 shadow-sm">Save PDF</button>
@@ -429,17 +422,15 @@
                                                 <label class="small fw-bold text-muted d-block mb-1">Weight</label>
                                                 <select class="form-select form-select-sm" id="mobile-single-weight-select" onchange="document.getElementById('s-weight-'+this.value).click()">
                                                     <option value="100">Thin</option>
-                                                    <option value="300">Light</option>a
-                                                    <option value="400" selected>Regular</option>
-                                                    <option value="500">Medium</option>
-                                                    <option value="700">Bold</option>
+                                                    <option value="300"selected>Light</option>a
+                                                    <option value="400" >Regular</option>
+                                                   
                                                 </select>
                                                 <div id="single-text-weight-selector" class="d-none">
                                                     <input type="radio" name="single-text-weight" id="s-weight-100" value="100">
-                                                    <input type="radio" name="single-text-weight" id="s-weight-300" value="300">
-                                                    <input type="radio" name="single-text-weight" id="s-weight-400" value="400" checked>
-                                                    <input type="radio" name="single-text-weight" id="s-weight-500" value="500">
-                                                    <input type="radio" name="single-text-weight" id="s-weight-700" value="700">
+                                                    <input type="radio" name="single-text-weight" id="s-weight-300" value="300"checked>
+                                                    <input type="radio" name="single-text-weight" id="s-weight-400" value="400">
+                                        
                                                 </div>
                                             </div>
                                             <div class="col-6">
@@ -447,16 +438,13 @@
                                                 <select class="form-select form-select-sm" id="mobile-single-size-select" onchange="document.getElementById('s-size-'+this.value).click()">
                                                     <option value="xs">XS</option>
                                                     <option value="sm" selected>Small</option>
-                                                    <option value="base">Medium</option>
-                                                    <option value="lg">Large</option>
-                                                    <option value="xl">XL</option>
+
+                                                   
                                                 </select>
                                                 <div id="single-text-size-selector" class="d-none">
                                                     <input type="radio" name="single-text-size" id="s-size-xs" value="text-xs">
                                                     <input type="radio" name="single-text-size" id="s-size-sm" value="text-sm" checked>
-                                                    <input type="radio" name="single-text-size" id="s-size-base" value="text-base">
-                                                    <input type="radio" name="single-text-size" id="s-size-lg" value="text-lg">
-                                                    <input type="radio" name="single-text-size" id="s-size-xl" value="text-xl">
+
                                                 </div>
                                             </div>
                                         </div>
@@ -497,15 +485,15 @@
                                                  <label class="small fw-bold text-muted d-block mb-1">Weight</label>
                                                  <select class="form-select form-select-sm" onchange="document.getElementById('d-weight-'+this.value).click()">
                                                     <option value="100">Thin</option>
-                                                    <option value="300">Light</option>
-                                                    <option value="400" selected>Regular</option>
+                                                    <option value="300" selected>Light</option>
+                                                    <option value="400">Regular</option>
                                                     <option value="500">Medium</option>
                                                     <option value="700">Bold</option>
                                                 </select>
                                                 <div id="double-text-weight-selector" class="d-none">
                                                     <input type="radio" name="double-text-weight" id="d-weight-100" value="100">
-                                                    <input type="radio" name="double-text-weight" id="d-weight-300" value="300">
-                                                    <input type="radio" name="double-text-weight" id="d-weight-400" value="400" checked>
+                                                    <input type="radio" name="double-text-weight" id="d-weight-300" value="300" checked>
+                                                    <input type="radio" name="double-text-weight" id="d-weight-400" value="400">
                                                     <input type="radio" name="double-text-weight" id="d-weight-500" value="500">
                                                     <input type="radio" name="double-text-weight" id="d-weight-700" value="700">
                                                 </div>
@@ -513,24 +501,22 @@
                                             <div class="col-6">
                                                 <label class="small fw-bold text-muted d-block mb-1">Size</label>
                                                 <select class="form-select form-select-sm" onchange="document.getElementById('d-size-'+this.value).click()">
-                                                    <option value="xs">XS</option>
-                                                    <option value="sm" selected>Small</option>
-                                                    <option value="base">Medium</option>
-                                                    <option value="lg">Large</option>
-                                                    <option value="xl">XL</option>
+                                                    <option value="xs" selected>XS</option>
+                                                    <option value="sm">Small</option>
+                                             
+                                                    
                                                 </select>
                                                 <div id="double-text-size-selector" class="d-none">
-                                                    <input type="radio" name="double-text-size" id="d-size-xs" value="text-xs">
-                                                    <input type="radio" name="double-text-size" id="d-size-sm" value="text-sm" checked>
-                                                    <input type="radio" name="double-text-size" id="d-size-base" value="text-base">
-                                                    <input type="radio" name="double-text-size" id="d-size-lg" value="text-lg">
-                                                    <input type="radio" name="double-text-size" id="d-size-xl" value="text-xl">
+                                                    <input type="radio" name="double-text-size" id="d-size-xs" value="text-xs" checked>
+                                                    <input type="radio" name="double-text-size" id="d-size-sm" value="text-sm">
+                                             
+                                                    
                                                 </div>
                                             </div>
                                         </div>
 
                                         <div class="mt-2">
-                                            <button id="export-dual-btn" class="btn btn-primary w-100 py-3 shadow-sm">Export</button>
+                                            
                                             <div class="d-grid gap-2 mt-2">
                                                 <button id="export-dual-svg-btn" class="btn btn-outline-dark w-100 py-2 shadow-sm">Export SVG</button>
                                                 <button id="export-dual-pdf-btn" class="btn btn-outline-secondary w-100 py-2 shadow-sm">Save PDF</button>

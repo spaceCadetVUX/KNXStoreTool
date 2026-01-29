@@ -10,16 +10,17 @@
     
     <style>
         :root {
-            --primary-color: #2563eb;
-            --primary-hover: #1d4ed8;
+            --primary-color: #25486e;
+            --primary-hover: #25486e;
             --bg-color: #f3f4f6;
             --card-bg: #ffffff;
             --text-main: #1f2937;
             --text-muted: #6b7280;
             --border-color: #e5e7eb;
             --radius-lg: 1rem;
-            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05); /* Added from your original code */
+            --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
             --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+            --shadow-hover: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
         }
 
         body {
@@ -29,7 +30,7 @@
             min-height: 100vh;
         }
 
-        /* --- HEADER STYLING (Redesigned based on your original code) --- */
+        /* --- HEADER STYLING (UNCHANGED) --- */
         .site-header {
             background: var(--card-bg);
             padding: 0.75rem 1rem;
@@ -61,53 +62,102 @@
         }
         /* --- END HEADER STYLING --- */
 
-        /* Card Styling (Kept from previous update) */
+        /* --- NEW PRODUCT CARD STYLING --- */
         .mode-card {
-            border: 1px solid var(--border-color);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow-md);
             background: var(--card-bg);
-            transition: all 0.3s ease;
+            border: 1px solid transparent; /* Prepare for hover border */
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
             text-decoration: none;
             color: inherit;
-            display: block;
-            text-align: center; 
-            padding: 1.5rem; 
+            display: flex;
+            flex-direction: column;
+            overflow: hidden; /* Contains the image zoom */
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            height: 100%;
         }
 
         .mode-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 8px 15px rgba(37, 99, 235, 0.15);
-            border-color: var(--primary-color);
+            transform: translateY(-8px);
+            box-shadow: var(--shadow-hover);
+            border-color: rgba(37, 99, 235, 0.3); /* Subtle blue border on hover */
         }
-        
-        .mode-img-container {
-            width: 100%;
-            max-width: 300px;
-            height: auto;
-            margin: 0 auto 1rem;
+
+        /* Image Area */
+        .mode-img-wrapper {
+            background-color: #f8f9fa; /* Light gray background for product contrast */
+            padding: 2rem;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
             overflow: hidden;
-            border-radius: 0.5rem;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            aspect-ratio: 4/3; /* Enforce consistent aspect ratio */
         }
 
         .mode-img {
             width: 100%;
-            height: auto;
-            display: block;
-            object-fit: cover;
+            height: 100%;
+            object-fit: contain;
+            transition: transform 0.5s ease;
+            filter: drop-shadow(0 4px 6px rgba(0,0,0,0.05));
+        }
+
+        .mode-card:hover .mode-img {
+            transform: scale(1.08); /* Zoom effect */
+        }
+
+        /* Text Content Area */
+        .card-content {
+            padding: 1.5rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            border-top: 1px solid var(--border-color);
+            background: white;
         }
 
         .mode-name {
+            font-size: 1.1rem;
             font-weight: 700;
             color: var(--text-main);
-            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+            transition: color 0.3s ease;
+        }
+
+        .mode-card:hover .mode-name {
+            color: var(--primary-color);
         }
 
         .mode-description {
-            font-size: 0.9rem;
+            font-size: 0.875rem;
             color: var(--text-muted);
+            line-height: 1.5;
+            margin-bottom: 1.5rem;
         }
+
+        /* Action Arrow */
+        .action-row {
+            margin-top: auto; /* Pushes to bottom */
+            display: flex;
+            align-items: center;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--primary-color);
+        }
+
+        .arrow-icon {
+            font-family: 'Material Symbols Outlined';
+            font-size: 1.2rem;
+            margin-left: 0.25rem;
+            transition: transform 0.3s ease;
+        }
+
+        .mode-card:hover .arrow-icon {
+            transform: translateX(5px); /* Arrow slides right on hover */
+        }
+
     </style>
 </head>
 <body class="d-flex flex-column">
@@ -122,57 +172,97 @@
                     style="width: auto; height: 20px;">
             </div>
         </header>
+
         <main>
-           <div class="row row-cols-1 row-cols-sm-2 row-cols-md-2 row-cols-lg-3 g-4 justify-content-center">
+            <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4 mb-5">
 
                 <div class="col">
-                    <a href="JinkEGG.html" class="mode-card h-100">
-                        <div class="mode-img-container">
+                    <a href="JinkEGG.html" class="mode-card">
+                        <div class="mode-img-wrapper">
                             <img src="../src/jink/eag/Glossy-white.jpg" alt="JinkEGG Switch" class="mode-img">
                         </div>
-                        
-                        <h2 class="mode-name h5 mb-1">Jink EGG</h2>
-                        <p class="mode-description mb-0">Matter Switch</p>
+                        <div class="card-content">
+                            <h2 class="mode-name">Jink EGG</h2>
+                            <p class="mode-description">Experience the seamless Matter integration with elegant design.</p>
+                            <div class="action-row">
+                                Go to Edit <span class="arrow-icon">arrow_forward</span>
+                            </div>
+                        </div>
                     </a>
                 </div>
 
                 <div class="col">
-                    <a href="steveLeung.html" class="mode-card h-100">
-                        <div class="mode-img-container">
+                    <a href="steveLeung.html" class="mode-card">
+                        <div class="mode-img-wrapper">
                             <img src="../src/moorgenimg/Supercar/supercar-champagne-gold.jpg" alt="Steve Leung Switch" class="mode-img">
                         </div>
-                        <h2 class="mode-name h5 mb-1">Moorgen steveLeung</h2>
-                        <p class="mode-description mb-0">See details</p>
+                        <div class="card-content">
+                            <h2 class="mode-name">Moorgen Steve Leung</h2>
+                            <p class="mode-description">Luxury champagne gold finish designed by Steve Leung.</p>
+                            <div class="action-row">
+                                Go to Edit <span class="arrow-icon">arrow_forward</span>
+                            </div>
+                        </div>
                     </a>
                 </div>
 
                 <div class="col">
-                    <a href="swiss.html" class="mode-card h-100">
-                        <div class="mode-img-container">
+                    <a href="swiss.html" class="mode-card">
+                        <div class="mode-img-wrapper">
                             <img src="../src/moorgenimg/Swiss/swiss-ferrari-red.jpg" alt="Swiss Standard Switch" class="mode-img">
                         </div>
-                        <h2 class="mode-name h5 mb-1">Swiss Standard</h2>
-                        <p class="mode-description mb-0">See details</p>
+                        <div class="card-content">
+                            <h2 class="mode-name">Swiss Standard</h2>
+                            <p class="mode-description">Precision engineering meets bold aesthetics in Ferrari Red.</p>
+                            <div class="action-row">
+                                Go to Edit <span class="arrow-icon">arrow_forward</span>
+                            </div>
+                        </div>
                     </a>
                 </div>
 
                 <div class="col">
-                    <a href="uitiotSp312.html" class="mode-card h-100">
-                        <div class="mode-img-container">
+                    <a href="uitiotSp312.html" class="mode-card">
+                        <div class="mode-img-wrapper">
                             <img src="../src/uitiot/UITIOT - SP312/space-silver.jpg" alt="UIT-IoT SP312 Switch" class="mode-img">
                         </div>
-                        <h2 class="mode-name h5 mb-1">UIT-IoT SP312</h2>
-                        <p class="mode-description mb-0">See details</p>
+                        <div class="card-content">
+                            <h2 class="mode-name">UIT-IoT SP312</h2>
+                            <p class="mode-description">Advanced control functionality with Space Silver finish.</p>
+                            <div class="action-row">
+                                Go to Edit <span class="arrow-icon">arrow_forward</span>
+                            </div>
+                        </div>
                     </a>
                 </div>
 
                 <div class="col">
-                    <a href="uitiotSp3118.html" class="mode-card h-100">
-                        <div class="mode-img-container">
+                    <a href="uitiotSp3118.html" class="mode-card">
+                        <div class="mode-img-wrapper">
                             <img src="../src/uitiot/Sp3118/SP3118-sapphireblue.jpg" alt="UIT-IoT SP3118 Switch" class="mode-img">
                         </div>
-                        <h2 class="mode-name h5 mb-1">UIT-IoT SP3118</h2>
-                       <p class="mode-description mb-0">See details</p>
+                        <div class="card-content">
+                            <h2 class="mode-name">UIT-IoT SP3118</h2>
+                            <p class="mode-description">Sapphire Blue edition offering smart connectivity.</p>
+                            <div class="action-row">
+                                Go to Edit <span class="arrow-icon">arrow_forward</span>
+                            </div>
+                        </div>
+                    </a>
+                </div>
+
+                <div class="col">
+                    <a href="glassSeries.html" class="mode-card">
+                        <div class="mode-img-wrapper">
+                            <img src="../../src/jink/glass4gang/LiquidSilver.jpg" alt="Matter Glass Series" class="mode-img">
+                        </div>
+                        <div class="card-content">
+                            <h2 class="mode-name">Matter Glass Series</h2>
+                            <p class="mode-description">Modern glass touch panel for the ultimate smart home.</p>
+                            <div class="action-row">
+                                Go to Edit <span class="arrow-icon">arrow_forward</span>
+                            </div>
+                        </div>
                     </a>
                 </div>
 

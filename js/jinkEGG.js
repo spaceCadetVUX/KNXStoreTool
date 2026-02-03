@@ -828,166 +828,237 @@ updateHeroNoteDisplay();
         renderHeroIcons();
     }
         // --- Export SVG & PDF Functionality (based on jinkEGG.js) ---
-        const exportSvgBtn = document.getElementById('export-svg-btn');
-        const exportSingleSvgBtn = document.getElementById('export-single-svg-btn');
-        const exportDualSvgBtn = document.getElementById('export-dual-svg-btn');
-        function mmToPx(mm) {
-            return mm * (96 / 25.4);
-        }
-        // Function to generate SVG based on current tab and content
-        async function generateCurrentSVG() {
-            // Determine which tab is active
-            let tabKey;
-            const visiblePane = document.querySelector('.tab-pane:not(.hidden)');
-            if (visiblePane) tabKey = visiblePane.getAttribute('data-tab');
-            else {
-                const activeTab = document.querySelector('.option-tab.active');
-                tabKey = activeTab?.getAttribute('data-tab');
+        // --- Export SVG & PDF Functionality (based on jinkEGG.js) ---
+const exportSvgBtn = document.getElementById('export-svg-btn');
+const exportSingleSvgBtn = document.getElementById('export-single-svg-btn');
+const exportDualSvgBtn = document.getElementById('export-dual-svg-btn');
+
+function mmToPx(mm) {
+    return mm * (96 / 25.4);
+}
+
+// 1. New Helper: Fetch and Embed Font as Base64
+// This prevents "incomplete load" by putting the font INSIDE the file.
+let cachedFontCSS = null;
+async function getEmbeddedFontCSS() {
+    if (cachedFontCSS) return cachedFontCSS;
+    
+    const fontUrl = 'https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200';
+    
+    try {
+        // A. Fetch the CSS to find the true .woff2 URL
+        const cssResp = await fetch(fontUrl);
+        const cssText = await cssResp.text();
+        const match = cssText.match(/url\((https:\/\/[^)]+\.woff2)\)/);
+        
+        if (!match) throw new Error('Could not find woff2 URL');
+        
+        // B. Fetch the actual font binary
+        const fontResp = await fetch(match[1]);
+        const fontBlob = await fontResp.blob();
+        
+        // C. Convert to Base64
+        return new Promise((resolve) => {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                // Create a robust @font-face rule
+                const base64data = reader.result;
+                const newRule = `
+                    @font-face {
+                        font-family: 'Material Symbols Outlined';
+                        font-style: normal;
+                        font-weight: 100 700;
+                        src: url(${base64data}) format('woff2');
+                    }
+                `;
+                cachedFontCSS = newRule;
+                resolve(newRule);
+            };
+            reader.readAsDataURL(fontBlob);
+        });
+    } catch (e) {
+        console.warn('Font embedding failed, using remote link fallback:', e);
+        return `@import url('${fontUrl}');`;
+    }
+}
+
+// Function to generate SVG based on current tab and content
+async function generateCurrentSVG() {
+    // Determine which tab is active
+    let tabKey;
+    const visiblePane = document.querySelector('.tab-pane:not(.hidden)');
+    if (visiblePane) tabKey = visiblePane.getAttribute('data-tab');
+    else {
+        const activeTab = document.querySelector('.option-tab.active');
+        tabKey = activeTab?.getAttribute('data-tab');
+    }
+
+    // Render correct overlay
+    if (tabKey === 'single') renderSingleTextOverlay();
+    else if (tabKey === 'double') renderDoubleTextOverlay();
+    else renderHeroIcons();
+
+    // Allow fonts to settle in the DOM (just in case)
+    await new Promise(r => setTimeout(r, 100));
+
+    const currentIconWeight = globalIconWeight || '400';
+    const container = heroIconsContainer;
+    if (!container) return null;
+
+    const svgMm = 86;
+    const strokeMm = 0.5;
+    const pxPerMm = 96 / 25.4;
+    const widthPx = Math.round(svgMm * pxPerMm);
+    const heightPx = widthPx;
+    const strokePx = Math.max(1, Math.round(strokeMm * pxPerMm));
+    const containerRect = container.getBoundingClientRect();
+
+    const xmlns = 'http://www.w3.org/2000/svg';
+    const svgEl = document.createElementNS(xmlns, 'svg');
+    svgEl.setAttribute('xmlns', xmlns);
+    svgEl.setAttribute('width', `${svgMm}mm`);
+    svgEl.setAttribute('height', `${svgMm}mm`);
+    svgEl.setAttribute('viewBox', `0 0 ${widthPx} ${heightPx}`);
+
+    // --- FIX: Wait for the embedded font CSS ---
+    const fontCSS = await getEmbeddedFontCSS();
+
+    const styleEl = document.createElementNS(xmlns, 'style');
+    // Inject the Base64 font + helper classes
+    styleEl.textContent = `${fontCSS} .icon{font-family: 'Material Symbols Outlined'; } .label{font-family: 'Inter', sans-serif;}`;
+    svgEl.appendChild(styleEl);
+
+    // Outer square
+    const rect = document.createElementNS(xmlns, 'rect');
+    rect.setAttribute('x', String(strokePx / 2));
+    rect.setAttribute('y', String(strokePx / 2));
+    rect.setAttribute('width', String(widthPx - strokePx));
+    rect.setAttribute('height', String(heightPx - strokePx));
+    rect.setAttribute('fill', 'none');
+    rect.setAttribute('stroke', '#000');
+    rect.setAttribute('stroke-width', String(strokePx));
+    svgEl.appendChild(rect);
+
+    const children = Array.from(container.children);
+    children.forEach(child => {
+        const childRect = child.getBoundingClientRect();
+        const cx = (childRect.left + childRect.right) / 2 - containerRect.left;
+        const cy = (childRect.top + childRect.bottom) / 2 - containerRect.top;
+        const svgX = Math.round((cx / containerRect.width) * widthPx);
+        const svgY = Math.round((cy / containerRect.height) * heightPx);
+
+        // If it's an icon element
+        if (child.querySelector && child.querySelector('.material-symbols-outlined')) {
+            const span = child.querySelector('.material-symbols-outlined');
+            const txt = span.textContent || span.innerText || '';
+            let fs = child.style.fontSize;
+            if (fs && fs.includes('rem')) {
+                const remVal = parseFloat(fs);
+                fs = (remVal * 16) + 'px';
             }
-            // Render correct overlay
-            if (tabKey === 'single') renderSingleTextOverlay();
-            else if (tabKey === 'double') renderDoubleTextOverlay();
-            else renderHeroIcons();
-            // Allow fonts to settle
-            await new Promise(r => setTimeout(r, 100));
-            const currentIconWeight = globalIconWeight || '400';
-            const container = heroIconsContainer;
-            if (!container) return null;
-            const svgMm = 86;
-            const strokeMm = 0.5;
-            const pxPerMm = 96 / 25.4;
-            const widthPx = Math.round(svgMm * pxPerMm);
-            const heightPx = widthPx;
-            const strokePx = Math.max(1, Math.round(strokeMm * pxPerMm));
-            const containerRect = container.getBoundingClientRect();
-            const xmlns = 'http://www.w3.org/2000/svg';
-            const svgEl = document.createElementNS(xmlns, 'svg');
-            svgEl.setAttribute('xmlns', xmlns);
-            svgEl.setAttribute('width', `${svgMm}mm`);
-            svgEl.setAttribute('height', `${svgMm}mm`);
-            svgEl.setAttribute('viewBox', `0 0 ${widthPx} ${heightPx}`);
-            // Embed minimal CSS to load Material Symbols for .icon only
-            const styleEl = document.createElementNS(xmlns, 'style');
-            styleEl.textContent = `@import url('https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200'); .icon{font-family: 'Material Symbols Outlined'; } .label{font-family: 'Inter', sans-serif;}`;
-            svgEl.appendChild(styleEl);
-            // Outer square
-            const rect = document.createElementNS(xmlns, 'rect');
-            rect.setAttribute('x', String(strokePx / 2));
-            rect.setAttribute('y', String(strokePx / 2));
-            rect.setAttribute('width', String(widthPx - strokePx));
-            rect.setAttribute('height', String(heightPx - strokePx));
-            rect.setAttribute('fill', 'none');
-            rect.setAttribute('stroke', '#000');
-            rect.setAttribute('stroke-width', String(strokePx));
-            svgEl.appendChild(rect);
-            const children = Array.from(container.children);
-            children.forEach(child => {
-                const childRect = child.getBoundingClientRect();
-                const cx = (childRect.left + childRect.right) / 2 - containerRect.left;
-                const cy = (childRect.top + childRect.bottom) / 2 - containerRect.top;
-                const svgX = Math.round((cx / containerRect.width) * widthPx);
-                const svgY = Math.round((cy / containerRect.height) * heightPx);
-                // If it's an icon element (material-symbols span or button with span)
-                if (child.querySelector && child.querySelector('.material-symbols-outlined')) {
-                    const span = child.querySelector('.material-symbols-outlined');
-                    const txt = span.textContent || span.innerText || '';
+            const t = document.createElementNS(xmlns, 'text');
+            t.setAttribute('x', String(svgX));
+            t.setAttribute('y', String(svgY + Math.round(8 * pxPerMm / 3)));
+            t.setAttribute('text-anchor', 'middle');
+            t.setAttribute('fill', '#000');
+            // Ensure font-family and weights are explicit
+            t.setAttribute('style', `font-family: 'Material Symbols Outlined'; font-variation-settings: 'wght' ${currentIconWeight}; font-weight: ${currentIconWeight}; font-size: ${fs || '24px'};`);
+            t.textContent = txt;
+            svgEl.appendChild(t);
+        } else {
+            // treat as label/text
+            const txt = child.textContent || child.innerText || '';
+            if (!txt.trim()) return;
+            
+            let lines = [];
+            const innerElems = child.querySelectorAll('div, span, p');
+            if (innerElems && innerElems.length > 1) {
+                innerElems.forEach(el => {
+                    const t = (el.textContent || el.innerText || '').trim();
+                    if (t) lines.push(t);
+                });
+            } else {
+                lines = txt.split(/\n|\r/).map(s => s.trim()).filter(Boolean);
+            }
+
+            if (lines.length === 0) return;
+
+            if (lines.length === 1) {
+                const t = document.createElementNS(xmlns, 'text');
+                t.setAttribute('x', String(svgX));
+                t.setAttribute('y', String(svgY + Math.round(6 * pxPerMm / 3)));
+                t.setAttribute('text-anchor', 'middle');
+                t.setAttribute('fill', '#000');
+                t.setAttribute('class', 'label');
+                let fs = child.style.fontSize;
+                if (fs && fs.includes('rem')) {
+                    const remVal = parseFloat(fs);
+                    fs = (remVal * 16) + 'px';
+                }
+                t.setAttribute('font-size', fs || '14px');
+                t.setAttribute('font-weight', child.style.fontWeight || '400');
+                t.textContent = lines[0];
+                svgEl.appendChild(t);
+            } else {
+                const lineGap = Math.round(5 * pxPerMm / 2);
+                lines.forEach((ln, idx) => {
+                    const t = document.createElementNS(xmlns, 'text');
+                    t.setAttribute('x', String(svgX));
+                    const offset = (idx === 0) ? -lineGap : lineGap;
+                    t.setAttribute('y', String(svgY + Math.round(offset)));
+                    t.setAttribute('text-anchor', 'middle');
+                    t.setAttribute('fill', '#000');
+                    t.setAttribute('class', 'label');
                     let fs = child.style.fontSize;
                     if (fs && fs.includes('rem')) {
                         const remVal = parseFloat(fs);
                         fs = (remVal * 16) + 'px';
                     }
-                    const t = document.createElementNS(xmlns, 'text');
-                    t.setAttribute('x', String(svgX));
-                    t.setAttribute('y', String(svgY + Math.round(8 * pxPerMm / 3))); // small vertical offset
-                    t.setAttribute('text-anchor', 'middle');
-                    t.setAttribute('fill', '#000');
-                    t.setAttribute('style', `font-family: 'Material Symbols Outlined'; font-variation-settings: 'wght' ${currentIconWeight}; font-weight: ${currentIconWeight}; font-size: ${fs || '24px'};`);
-                    t.textContent = txt;
+                    t.setAttribute('font-size', fs || '14px');
+                    t.setAttribute('font-weight', child.style.fontWeight || '400');
+                    t.textContent = ln;
                     svgEl.appendChild(t);
-                } else {
-                    // treat as label/text (single or double)
-                    const txt = child.textContent || child.innerText || '';
-                    if (!txt.trim()) return;
-                    // Prefer explicit stacked children (double mode creates inner divs)
-                    let lines = [];
-                    const innerElems = child.querySelectorAll('div, span, p');
-                    if (innerElems && innerElems.length > 1) {
-                        innerElems.forEach(el => {
-                            const t = (el.textContent || el.innerText || '').trim();
-                            if (t) lines.push(t);
-                        });
-                    } else {
-                        // Fallback to splitting by newline if no stacked children
-                        lines = txt.split(/\n|\r/).map(s => s.trim()).filter(Boolean);
-                    }
-                    if (lines.length === 0) return;
-                    if (lines.length === 1) {
-                        const t = document.createElementNS(xmlns, 'text');
-                        t.setAttribute('x', String(svgX));
-                        t.setAttribute('y', String(svgY + Math.round(6 * pxPerMm / 3)));
-                        t.setAttribute('text-anchor', 'middle');
-                        t.setAttribute('fill', '#000');
-                        t.setAttribute('class', 'label');
-                        let fs = child.style.fontSize;
-                        if (fs && fs.includes('rem')) {
-                            const remVal = parseFloat(fs);
-                            fs = (remVal * 16) + 'px';
-                        }
-                        t.setAttribute('font-size', fs || '14px');
-                        t.setAttribute('font-weight', child.style.fontWeight || '400');
-                        t.textContent = lines[0];
-                        svgEl.appendChild(t);
-                    } else {
-                        // stack two lines vertically — increase gap for readability
-                        const lineGap = Math.round(5 * pxPerMm / 2); // larger gap in px
-                        lines.forEach((ln, idx) => {
-                            const t = document.createElementNS(xmlns, 'text');
-                            t.setAttribute('x', String(svgX));
-                            const offset = (idx === 0) ? -lineGap : lineGap;
-                            t.setAttribute('y', String(svgY + Math.round(offset)));
-                            t.setAttribute('text-anchor', 'middle');
-                            t.setAttribute('fill', '#000');
-                            t.setAttribute('class', 'label');
-                            let fs = child.style.fontSize;
-                            if (fs && fs.includes('rem')) {
-                                const remVal = parseFloat(fs);
-                                fs = (remVal * 16) + 'px';
-                            }
-                            t.setAttribute('font-size', fs || '14px');
-                            t.setAttribute('font-weight', child.style.fontWeight || '400');
-                            t.textContent = ln;
-                            svgEl.appendChild(t);
-                        });
-                    }
-                }
-            });
-            const serializer = new XMLSerializer();
-            return serializer.serializeToString(svgEl);
-        }
-        async function exportCurrentTabSVG() {
-            const svgString = await generateCurrentSVG();
-            if (!svgString) return;
-            // Store SVG for PDF export
-            currentSVGString = svgString;
-            const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
-            const url = URL.createObjectURL(blob);
-            const dl = document.createElement('a');
-            const colorText = heroColor?.textContent?.replace('Color: ', '').toLowerCase().replace(/\s+/g, '-') || 'color';
-            const protocolText = heroProtocol?.textContent?.replace('Protocol: ', '').toLowerCase() || 'protocol';
-            dl.href = url;
-            dl.download = `matter-${protocolText}-${colorText}.svg`;
-            document.body.appendChild(dl);
-            dl.click();
-            dl.remove();
-            URL.revokeObjectURL(url);
-            // If formPDF window is open, send SVG preview to it
-            if (window.opener && window.opener.setSvgPreview) {
-                window.opener.setSvgPreview(svgString);
+                });
             }
         }
-        if (exportSvgBtn) exportSvgBtn.addEventListener('click', exportCurrentTabSVG);
-        if (exportSingleSvgBtn) exportSingleSvgBtn.addEventListener('click', exportCurrentTabSVG);
-        if (exportDualSvgBtn) exportDualSvgBtn.addEventListener('click', exportCurrentTabSVG);
+    });
+
+    const serializer = new XMLSerializer();
+    return serializer.serializeToString(svgEl);
+}
+
+// Wrapper to handle download
+async function exportCurrentTabSVG() {
+    const svgString = await generateCurrentSVG();
+    if (!svgString) return;
+
+    // Store SVG for PDF export if needed
+    if (typeof currentSVGString !== 'undefined') {
+        currentSVGString = svgString;
+    }
+    
+    const blob = new Blob([svgString], { type: 'image/svg+xml;charset=utf-8' });
+    const url = URL.createObjectURL(blob);
+    const dl = document.createElement('a');
+    
+    const colorText = heroColor?.textContent?.replace('Color: ', '').toLowerCase().replace(/\s+/g, '-') || 'color';
+    const protocolText = heroProtocol?.textContent?.replace('Protocol: ', '').toLowerCase() || 'protocol';
+    
+    dl.href = url;
+    dl.download = `matter-${protocolText}-${colorText}.svg`;
+    document.body.appendChild(dl);
+    dl.click();
+    dl.remove();
+    URL.revokeObjectURL(url);
+    
+    if (window.opener && window.opener.setSvgPreview) {
+        window.opener.setSvgPreview(svgString);
+    }
+}
+
+if (exportSvgBtn) exportSvgBtn.addEventListener('click', exportCurrentTabSVG);
+if (exportSingleSvgBtn) exportSingleSvgBtn.addEventListener('click', exportCurrentTabSVG);
+if (exportDualSvgBtn) exportDualSvgBtn.addEventListener('click', exportCurrentTabSVG);
         // --- PDF export ---
         const exportPdfBtn = document.getElementById('export-pdf-btn');
         const exportSinglePdfBtn = document.getElementById('export-single-pdf-btn');

@@ -833,9 +833,9 @@ updateHeroNoteDisplay();
         const exportSingleSvgBtn = document.getElementById('export-single-svg-btn');
         const exportDualSvgBtn = document.getElementById('export-dual-svg-btn');
 
-function mmToPx(mm) {
-    return mm * (96 / 25.4);
-}
+        function mmToPx(mm) {
+            return mm * (96 / 25.4);
+        }
 
 // 1. New Helper: Fetch and Embed Font as Base64
 // This prevents "incomplete load" by putting the font INSIDE the file.

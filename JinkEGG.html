@@ -189,6 +189,27 @@
             align-items: center;
             justify-content: center;
         }
+
+        .btn-custom-navy {
+            background-color: #25486e;
+            border-color: #25486e;
+            color: white;
+        }
+        .btn-custom-navy:hover {
+            background-color: #1c3652; /* Slightly darker for hover effect */
+            border-color: #1c3652;
+            color: white;
+        }
+        /* Outline Button Style */
+        .btn-outline-custom-navy {
+            color: #25486e;
+            border-color: #25486e;
+            background-color: transparent;
+        }
+        .btn-outline-custom-navy:hover {
+            background-color: #25486e;
+            color: white;
+        }
         /* Scrollbar */
         .custom-scrollbar::-webkit-scrollbar { width: 6px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: #f1f1f1; }
@@ -396,10 +417,10 @@
                                             </div>
                                         </div>
                                         <div class="mt-2">
-                                            <button id="export-single-btn" class="btn btn-primary w-100 py-3 shadow-sm">Export</button>
+                                            <!-- <button id="export-single-btn" class="btn btn-primary w-100 py-3 shadow-sm">Export</button> -->
                                             <div class="d-grid gap-2">
-                                                <button id="export-single-svg-btn" class="btn btn-outline-dark w-100 py-2 mt-2 shadow-sm">Export SVG</button>
-                                                <button id="export-single-pdf-btn" class="btn btn-outline-secondary w-100 py-2 shadow-sm">Save PDF</button>
+                                                <button id="export-single-svg-btn" class="btn btn-outline-custom-navy flex-fill py-2 shadow-sm">Export SVG</button>
+                                                <button id="export-single-pdf-btn" class="btn btn-primary w-100 py-3 shadow-sm btn-transition d-flex align-items-center justify-content-center gap-2">Save PDF</button>
                                             </div>
                                         </div>
                                     </div>
@@ -455,8 +476,8 @@
                                         </div>
                                         <div class="mt-2">
                                             <div class="d-grid gap-2 mt-2">
-                                                <button id="export-dual-svg-btn" class="btn btn-outline-dark w-100 py-2 shadow-sm">Export SVG</button>
-                                                <button id="export-dual-pdf-btn" class="btn btn-outline-secondary w-100 py-2 shadow-sm">Save PDF</button>
+                                                <button id="export-dual-svg-btn" class="btn btn-outline-custom-navy flex-fill py-2 shadow-sm">Export SVG</button>
+                                                <button id="export-dual-pdf-btn" class="btn btn-primary w-100 py-3 shadow-sm btn-transition d-flex align-items-center justify-content-center gap-2">Save PDF</button>
                                             </div>
                                         </div>
                                     </div>

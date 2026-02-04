@@ -829,9 +829,9 @@ updateHeroNoteDisplay();
     }
         // --- Export SVG & PDF Functionality (based on jinkEGG.js) ---
         // --- Export SVG & PDF Functionality (based on jinkEGG.js) ---
-const exportSvgBtn = document.getElementById('export-svg-btn');
-const exportSingleSvgBtn = document.getElementById('export-single-svg-btn');
-const exportDualSvgBtn = document.getElementById('export-dual-svg-btn');
+        const exportSvgBtn = document.getElementById('export-svg-btn');
+        const exportSingleSvgBtn = document.getElementById('export-single-svg-btn');
+        const exportDualSvgBtn = document.getElementById('export-dual-svg-btn');
 
 function mmToPx(mm) {
     return mm * (96 / 25.4);
@@ -1138,6 +1138,12 @@ async function exportCurrentTabPDF() {
         // This handles both Icons (buttons) and Text overlays
         const allChildren = iconsClone.querySelectorAll('*');
         allChildren.forEach(el => {
+            // --- FIX START: Remove text-white class ---
+            // Bootstrap's .text-white is !important, so it overrides inline styles. 
+            // We must remove it to allow the text to become black.
+            el.classList.remove('text-white');
+            // --- FIX END ---
+
             el.style.color = '#000000';
             el.style.textShadow = 'none';
             el.style.background = 'transparent';
@@ -1173,7 +1179,7 @@ async function exportCurrentTabPDF() {
     const noteText = document.querySelector('input[name="protocol"]')?.value || '';
     const roomText = document.querySelector('input[name="room"]')?.value?.trim() || '';
     const randomId = Math.floor(Math.random() * 10000).toString().padStart(4, '0');
-    const generatedId = `MATTER-${randomId}`;
+    const generatedId = `KNXSTORE-${randomId}`;
 
     const iframe = document.createElement('iframe');
     // Mobile-safe hiding
@@ -1186,96 +1192,292 @@ async function exportCurrentTabPDF() {
     const iframeDoc = iframe.contentDocument || iframe.contentWindow.document;
 
     iframeDoc.open();
+    // (Keep the rest of your HTML string exactly as it was, no changes needed here)
     iframeDoc.write(`
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.1/font/bootstrap-icons.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>-</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
-        :root { --primary-dark: #1e293b; --text-secondary: #64748b; --border-color: #e2e8f0; --accent-bg: #f8fafc; }
-        body { font-family: 'Segoe UI', Roboto, Helvetica, Arial, sans-serif; background-color: #f1f5f9; padding: 20px 15px; color: var(--primary-dark); font-size: 13px; }
-        .design-sheet { background-color: white; max-width: 850px; margin: 0 auto; padding: 30px; box-shadow: none; border-radius: 4px; position: relative; overflow: hidden; }
-        .sheet-accent { position: absolute; top: 0; left: 0; width: 100%; height: 4px; background: linear-gradient(90deg, #1a3a52 0%, #3498db 100%); }
-        .header-section { border-bottom: 1px solid var(--border-color); padding-bottom: 15px; margin-bottom: 20px; }
-        .contact-details { font-size: 11px; color: var(--text-secondary); text-align: right; line-height: 1.4; }
-        .contact-details i { color: #1a3a52; margin-right: 5px; }
-        .section-title { font-size: 10px; text-transform: uppercase; letter-spacing: 1.5px; font-weight: 700; color: #94a3b8; margin-bottom: 10px; display: flex; align-items: center; }
-        .section-title::after { content: ''; flex: 1; height: 1px; background-color: var(--border-color); margin-left: 10px; }
-        .preview-card { background-color: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 6px; height: 280px; display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
-        .preview-card img { max-width: 90%; max-height: 90%; object-fit: contain; }
-        .specs-box { border: 1px solid var(--border-color); border-radius: 6px; overflow: hidden; background-color: white; }
-        .spec-row { display: flex; border-bottom: 1px solid var(--border-color); font-size: 13px; }
-        .spec-row:last-child { border-bottom: none; }
-        .spec-label-col { width: 30%; background-color: var(--accent-bg); padding: 10px 15px; font-size: 10px; font-weight: 700; color: #64748b; text-transform: uppercase; letter-spacing: 0.4px; display: flex; align-items: center; border-right: 1px solid var(--border-color); }
-        .spec-value-col { flex: 1; padding: 10px 15px; color: #334155; font-weight: 500; display: flex; align-items: center; }
-        .color-preview { display: inline-block; width: 12px; height: 12px; border-radius: 3px; box-shadow: inset 0 0 2px rgba(255,255,255,0.5); margin-right: 8px; }
-        .sheet-footer { margin-top: 30px; padding-top: 15px; border-top: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #94a3b8; }
+        :root {
+            --primary-dark: #1e293b;
+            --text-secondary: #64748b;
+            --border-color: #e2e8f0;
+            --accent-bg: #f8fafc;
+            --accent: #3498db;
+            --accent-dark: #1a3a52;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            background-color: #f1f5f9;
+            color: var(--primary-dark);
+            font-size: 13.5px;
+            line-height: 1.5;
+            padding: 20px 12px;
+        }
+
+        .design-sheet {
+            background-color: white;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 28px 32px;
+            border-radius: 10px;
+            box-shadow: 0 8px 35px -10px rgba(0,0,0,0.07);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sheet-accent {
+            position: absolute;
+            top: 0; left: 0;
+            width: 100%; height: 5px;
+            background: linear-gradient(90deg, #1a3a52 0%, #3498db 100%);
+        }
+
+        /* ── Original header preserved ──────────────────────────────────────── */
+        .header-section {
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 18px;
+            margin-bottom: 28px;
+        }
+
+        .contact-details {
+            font-size: 11px;
+            color: var(--text-secondary);
+            text-align: right;
+            line-height: 1.5;
+        }
+
+        .contact-details i {
+            color: var(--accent-dark);
+            margin-right: 6px;
+        }
+
+        .section-title {
+            font-size: 10.5px;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            font-weight: 700;
+            color: #94a3b8;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+
+        .section-title::after {
+            content: '';
+            flex: 1;
+            height: 1px;
+            background-color: var(--border-color);
+            margin-left: 12px;
+        }
+
+        .preview-card {
+            background-color: #f9fafb;
+            border: 1px solid #e5e7eb;
+            border-radius: 8px;
+            height: 260px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        .preview-card img {
+            max-width: 94%;
+            max-height: 94%;
+            object-fit: contain;
+        }
+
+        .specs-box {
+            border: 1px solid var(--border-color);
+            border-radius: 8px;
+            overflow: hidden;
+            background: white;
+        }
+
+        .spec-row {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            font-size: 13px;
+        }
+
+        .spec-row:last-child {
+            border-bottom: none;
+        }
+
+        .spec-label-col {
+            width: 30%;
+            background-color: var(--accent-bg);
+            padding: 11px 16px;
+            font-size: 10.5px;
+            font-weight: 700;
+            color: #64748b;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-right: 1px solid var(--border-color);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .spec-value-col {
+            flex: 1;
+            padding: 11px 16px;
+            color: #334155;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+        }
+
+        .color-preview {
+            width: 14px;
+            height: 14px;
+            border-radius: 3px;
+            box-shadow: inset 0 0 2px rgba(0,0,0,0.15);
+            flex-shrink: 0;
+        }
+
+        .sheet-footer {
+            margin-top: 32px;
+            padding-top: 16px;
+            border-top: 1px solid var(--border-color);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 11px;
+            color: #94a3b8;
+        }
+
+        .id-code {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: var(--primary-dark);
+            background: #f1f5f9;
+            padding: 2px 6px;
+            border-radius: 4px;
+        }
+
+        @media (max-width: 992px) {
+            .design-sheet { padding: 24px 20px; }
+            .preview-card { height: 240px; }
+        }
+
+        @media (max-width: 768px) {
+            .header-section {
+                flex-direction: column !important;
+                align-items: flex-start !important;
+                text-align: left !important;
+            }
+            .contact-details { text-align: left; margin-top: 12px; }
+            .preview-card { height: 220px; }
+            .spec-label-col { width: 36%; }
+        }
+
+        @media (max-width: 576px) {
+            .design-sheet { border-radius: 0; margin: 0 -12px; }
+        }
     </style>
 </head>
 <body>
-    <div class="design-sheet">
-        <div class="sheet-accent"></div>
-        <div class="header-section d-flex justify-content-between align-items-end">
-            <div>
-                <img src="src/imgs/KNX STORE_Logo 2.png" alt="KNX Store Logo" style="height: 25px; width: auto; margin-bottom: 6px;">
-                <div style="font-size: 11px; font-weight: 600; color: #1a3a52; margin-top: 4px;">MATTER GLASS SERIES CONFIGURATION</div>
-            </div>
-            <div class="contact-details">
-                <div><i class="bi bi-geo-alt-fill"></i> SAV5.01-02 The Sun Avenue, 28 Mai Chí Thọ, Phường Bình Trưng, TP.HCM</div>
-                <div><i class="bi bi-telephone-fill"></i> 0918.918.755 &nbsp;|&nbsp; <i class="bi bi-envelope-fill"></i> sales@knxstore.vn</div>
-            </div>
+
+<div class="design-sheet">
+    <div class="sheet-accent"></div>
+
+    <!-- Original header kept almost identical -->
+    <div class="header-section d-flex justify-content-between align-items-end">
+        <div>
+            <img src="src/imgs/KNX STORE_Logo 2.png" alt="KNX Store Logo" style="height: 26px; width: auto; margin-bottom: 6px;">
+            <div style="font-size: 11px; font-weight: 600; color: #1a3a52; margin-top: 4px;">MATTER GLASS SERIES CONFIGURATION</div>
         </div>
-        <div class="row mb-4">
-            <div class="col-6">
-                <div class="section-title">Visual Render</div>
-                <div class="preview-card">
-                    <img src="${imgData}" alt="Render"> 
-                </div>
+        <div class="contact-details">
+            <div class="d-flex align-items-center gap-1">
+                <i class="bi bi-globe"></i>
+                <a href="https://knxstore.vn" target="_blank">knxstore.vn</a>
             </div>
-            <div class="col-6">
-                <div class="section-title">Technical Drawing</div>
-                <div class="preview-card" id="svg-container">
-                     <img src="${techSvgImgData}" alt="Technical Drawing" style="width:100%; height:100%; object-fit:contain;">
-                </div>
-            </div>
-        </div>
-        <div class="row">
-            <div class="col-12">
-                <div class="section-title">Technical Specifications</div>
-                <div class="specs-box">
-                    <div class="spec-row">
-                        <div class="spec-label-col"><i class="bi bi-tag-fill"></i> Product</div>
-                        <div class="spec-value-col">Matter Glass Series - Smart Keypad</div>
-                    </div>
-                    <div class="spec-row">
-                        <div class="spec-label-col"><i class="bi bi-palette-fill"></i> Color</div>
-                        <div class="spec-value-col">
-                            <span class="color-preview" style="background-color:#333;"></span>
-                            ${colorText.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
-                        </div>
-                    </div>
-                    <div class="spec-row">
-                        <div class="spec-label-col"><i class="bi bi-pencil-square"></i> Note</div>
-                        <div class="spec-value-col" style="color: #1a3a52; font-style: italic;">${noteText || '—'}</div>
-                    </div>
-                     <div class="spec-row">
-                        <div class="spec-label-col"><i class="bi bi-geo-alt-fill"></i> Room</div>
-                        <div class="spec-value-col" style="color: #1a3a52; font-style: italic;">${roomText || '—'}</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="sheet-footer">
-            <div>Generated by KNX Store Configurator</div>
-            <div>ID: <span style="font-family: 'Courier New', monospace; font-weight: 600;">${generatedId}</span></div>
+            <div><i class="bi bi-geo-alt-fill"></i> SAV5.01-02 The Sun Avenue, 28 Mai Chí Thọ, Phường Bình Trưng, TP.HCM</div>
+            <div><i class="bi bi-telephone-fill"></i> 0918.918.755 &nbsp;|&nbsp; <i class="bi bi-envelope-fill"></i> sales@knxstore.vn</div>
         </div>
     </div>
+
+
+    
+
+
+    <div class="row g-4 mb-5">
+    <div class="col-6 col-md-6">
+        <div class="section-title">Visual Render</div>
+        <div class="preview-card">
+            <img src="${imgData}" alt="Render" class="img-fluid">
+        </div>
+    </div>
+    <div class="col-6 col-md-6">
+        <div class="section-title">Technical Drawing</div>
+        <div class="preview-card">
+            <img src="${techSvgImgData}" alt="Technical Drawing" class="img-fluid">
+        </div>
+    </div>
+</div>
+
+
+    <!-- Specs -->
+    <div class="row">
+        <div class="col-12">
+            <div class="section-title">Technical Specifications</div>
+            <div class="specs-box">
+                <div class="spec-row">
+                    <div class="spec-label-col"><i class="bi bi-tag-fill"></i> Product</div>
+                    <div class="spec-value-col">Matter EGG Series - Smart Keypad</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label-col"><i class="bi bi-palette-fill"></i> Color</div>
+                    <div class="spec-value-col">
+                        <span class="color-preview" style="background-color:#333;"></span>
+                        ${colorText.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}
+                    </div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label-col"><i class="bi bi-arrows-fullscreen"></i> Dimensions</div>
+                    <div class="spec-value-col" style="color: #1a3a52; font-style: italic;">86 × 86 mm <span style="color:#94a3b8; font-size:11px; margin-left:6px;">(EU Standard)</span></div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label-col"><i class="bi bi-pencil-square"></i> Room</div>
+                    <div class="spec-value-col" style="color: #1a3a52; font-style: italic;">${noteText || '—'}</div>
+                </div>
+                <div class="spec-row">
+                    <div class="spec-label-col"><i class="bi bi-geo-alt-fill"></i> ID/Location</div>
+                    <div class="spec-value-col" style="color: #1a3a52; font-style: italic;">${roomText || '—'}</div>
+                </div>
+            </div>
+        </div>  
+    </div>
+
+        <p class="pt-4" style="font-size: 11px; color: #64748b;">
+            Once you have finished your selection, please send both files (PDF and SVG) via
+            <a href="https://zalo.me/0918918755" target="_blank" rel="noopener noreferrer">ZALO</a>
+            or email:
+            <a href="mailto:sales@knxstore.vn">sales@knxstore.vn</a>
+        </p>
+
+
+    <div class="sheet-footer">
+        
+
+        <div>Generated by KNX Store Configurator</div>
+
+        <div>ID: <span class="id-code">${generatedId}</span></div>
+    </div>
+</div>
+
 </body>
 </html>`);
     
-    iframeDoc.close();
+   iframeDoc.close();
 
     // --- STEP D: Save PDF ---
     setTimeout(async () => {

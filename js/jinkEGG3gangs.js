@@ -4,7 +4,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const heroColor = document.querySelector('.hero-color');
     const heroProtocol = document.querySelector('.hero-protocol');
     const thumbs = document.querySelectorAll('.thumb'); 
-    let globalIconWeight = document.querySelector('input[name="icon-weight"]:checked')?.value || '200';
+    let globalIconWeight = document.querySelector('input[name="icon-weight"]:checked')?.value || '400';
     function setActiveThumb(selectedThumb) {
         if (!selectedThumb) return;
         thumbs.forEach(thumb => {
@@ -351,50 +351,56 @@ updateHeroNoteDisplay();
   'zoom_in',
   'zoom_out',
 ];
+// Total: 218 unique icons
     // --- Render Functions ---
-    function renderHeroIcons(limit = 4) {
+    function renderHeroIcons(limit = 8) {
         if (!heroIconsContainer) return;
         const asideIconButtons = Array.from(document.querySelectorAll('#icon-grid .icon-btn'));
         heroIconsContainer.innerHTML = '';
-        // For 4 icons place them centered in each 2x2 cell (use center percentages)
+        // For 6-gang switch, define 6 positions centered on each gang
+        // These should be set according to the actual layout of the gangs in the preview image
+        // Example positions (top/left as percentages, adjust as needed for your layout):
         const positions = [
-            { left: '25%', top: '25%' },
-            { left: '75%', top: '25%' },
-            { left: '25%', top: '75%' },
-            { left: '75%', top: '75%' }
+             // Top left
+            { top: '24%', left: '72%' }, // Top right
+            
+            { top: '50%', left: '72%' }, // Middle right
+            
+            { top: '77%', left: '72%' }  // Bottom right
         ];
-        asideIconButtons.slice(0, limit).forEach((btn, idx) => {
+        asideIconButtons.slice(0, 6).forEach((btn, idx) => {
             const heroBtn = document.createElement('button');
             heroBtn.type = 'button';
             heroBtn.className = 'hero-icon position-absolute d-inline-flex align-items-center justify-content-center rounded text-white';
-            heroBtn.style.width = '2.5rem'; 
+            heroBtn.style.width = '2.5rem';
             heroBtn.style.height = '2.5rem';
             heroBtn.style.fontSize = '1.5rem';
             heroBtn.style.pointerEvents = 'auto';
             heroBtn.style.background = 'transparent';
             heroBtn.style.border = 'none';
-            heroBtn.style.transition = 'transform 0.18s ease';
-            heroBtn.onmouseover = () => heroBtn.style.transform = 'translate(-50%, -50%) scale(1.12)';
-            heroBtn.onmouseout = () => heroBtn.style.transform = 'translate(-50%, -50%) scale(1)';
+            heroBtn.style.transition = 'transform 0.2s';
+            // Remove hover scaling to keep icons perfectly centered
             heroBtn.dataset.index = String(idx);
             let iconName = 'home';
-            const iconWeight = globalIconWeight || '200';
+            const iconWeight = globalIconWeight || '400';
             const iconElement = btn.querySelector('.material-symbols-outlined');
             if (iconElement) {
                 iconName = iconElement.textContent.trim() || 'home';
             }
             heroBtn.innerHTML = `<span class="material-symbols-outlined" style="font-variation-settings: 'wght' ${iconWeight}; font-weight: ${iconWeight}; font-family: 'Material Symbols Outlined'; text-transform:none">${iconName}</span>`;
+            // Center icon on each gang
             const pos = positions[idx] || positions[0];
-            Object.keys(pos).forEach(k => { heroBtn.style[k] = pos[k]; });
-            // center the button on the coordinate
-            heroBtn.style.transform = 'translate(-50%, -50%) scale(1)';
+            heroBtn.style.position = 'absolute';
+            heroBtn.style.top = pos.top;
+            heroBtn.style.left = pos.left;
+            heroBtn.style.transform = 'translate(-50%, -50%)';
             heroBtn.addEventListener('click', () => {
                 document.querySelectorAll('.hero-icon.selected').forEach(el => {
                     el.classList.remove('selected');
                     el.style.border = 'none';
                 });
                 heroBtn.classList.add('selected');
-                heroBtn.style.border = '2px solid #0d6efd'; 
+                heroBtn.style.border = '2px solid #0d6efd';
                 const correspondingAside = document.querySelectorAll('#icon-grid .icon-btn')[idx];
                 if (correspondingAside) correspondingAside.focus();
             });
@@ -409,34 +415,40 @@ updateHeroNoteDisplay();
         'text-xl': '1.25rem'
     };
     // --- Single Line Overlay ---
-    const singleInputs = Array.from({ length: 4 }, (_, i) => document.getElementById(`single-input-${i+1}`));
+    const singleInputs = Array.from({ length: 6 }, (_, i) => document.getElementById(`single-input-${i+1}`));
     function renderSingleTextOverlay() {
         if (!heroIconsContainer) return;
-        let weight = '300';
+        let weight = '400';
         const checked = document.querySelector('input[name="single-text-weight"]:checked');
         if (checked) weight = checked.value;
-        let sizeClass = 'text-sm'; 
+        let sizeClass = 'text-sm';
         const checkedSize = document.querySelector('input[name="single-text-size"]:checked');
         if (checkedSize) sizeClass = checkedSize.value;
-        // center positions for 2x2 grid
+        // Use the same positions as the icons for 6-gang switch
         const positions = [
-            { left: '25%', top: '25%' },
-            { left: '75%', top: '25%' },
-            { left: '25%', top: '75%' },
-            { left: '75%', top: '75%' }
+          
+            { top: '23%', left: '72%' }, // Top right
+         
+            { top: '50%', left: '72%' }, // Middle right
+           
+            { top: '77%', left: '72%' }  // Bottom right
         ];
         heroIconsContainer.innerHTML = '';
-        for (let i = 0; i < 4; i++) {
+        for (let i = 0; i < 6; i++) {
             const val = (singleInputs[i] && singleInputs[i].value) ? singleInputs[i].value : '';
+            // Align left/right based on icon position
+            const isLeft = i % 2 === 0;
+            const alignClass = isLeft ? 'justify-content-start text-start' : 'justify-content-end text-end';
             const el = document.createElement('div');
-            el.className = `hero-text position-absolute d-inline-flex align-items-center justify-content-center text-center px-2 py-1 rounded text-white`;
+            el.className = `hero-text position-absolute d-inline-flex align-items-center ${alignClass} px-2 py-1 rounded text-white`;
             el.dataset.index = String(i);
             el.style.fontWeight = weight;
             el.style.fontVariationSettings = `'wght' ${weight}`;
             el.style.fontSize = fontSizeMap[sizeClass] || '0.875rem';
-            el.style.whiteSpace = 'pre-wrap';
             const pos = positions[i] || positions[0];
-            Object.keys(pos).forEach(k => { el.style[k] = pos[k]; });
+            el.style.position = 'absolute';
+            el.style.top = pos.top;
+            el.style.left = pos.left;
             el.style.transform = 'translate(-50%, -50%)';
             el.textContent = val;
             heroIconsContainer.appendChild(el);
@@ -466,49 +478,49 @@ updateHeroNoteDisplay();
              renderSingleTextOverlay();
         });
     });
-    // --- Double Line Overlay (4 cells, 2 lines each) ---
-    const doubleInputs = Array.from({ length: 8 }, (_, i) => document.getElementById(`double-input-${i+1}`));
+    // --- Double Line Overlay ---
+    const doubleInputs = Array.from({ length: 6 }, (_, i) => document.getElementById(`double-input-${i+1}`));
     function renderDoubleTextOverlay() {
         if (!heroIconsContainer) return;
-        let weight = '300';
+        let weight = '400';
         const checked = document.querySelector('input[name="double-text-weight"]:checked');
         if (checked) weight = checked.value;
         let sizeClass = 'text-sm';
         const checkedSize = document.querySelector('input[name="double-text-size"]:checked');
         if (checkedSize) sizeClass = checkedSize.value;
-        // center positions for 4 cells (2x2)
+        // For double line, stack two lines at each icon position
         const positions = [
-            { left: '25%', top: '25%' },
-            { left: '75%', top: '25%' },
-            { left: '25%', top: '75%' },
-            { left: '75%', top: '75%' }
+      
+            { top: '23%', left: '72%' },
+          
+            { top: '50%', left: '72%' },
+        
+            { top: '77%', left: '72%' }
         ];
         heroIconsContainer.innerHTML = '';
-        for (let i = 0; i < 4; i++) {
-            const lineA = (doubleInputs[i] && doubleInputs[i].value) ? doubleInputs[i].value.substring(0, 8) : '';
-            const lineB = (doubleInputs[i + 4] && doubleInputs[i + 4].value) ? doubleInputs[i + 4].value.substring(0, 8) : '';
-            const isLeft = i % 2 === 0;
+        for (let i = 0; i < 12; i++) {
+            const val = (doubleInputs[i] && doubleInputs[i].value) ? doubleInputs[i].value : '';
+            // Each icon position gets two lines: first line (i%2==0), second line (i%2==1)
+            const posIdx = Math.floor(i / 2);
+            const isLeft = posIdx % 2 === 0;
             const alignClass = isLeft ? 'justify-content-start text-start' : 'justify-content-end text-end';
             const el = document.createElement('div');
-            el.className = `hero-text position-absolute d-inline-flex flex-column align-items-center justify-content-center text-center px-2 py-1 rounded text-white`;
+            el.className = `hero-text position-absolute d-inline-flex align-items-center ${alignClass} px-2 py-1 rounded text-white`;
             el.dataset.index = String(i);
             el.style.fontWeight = weight;
             el.style.fontVariationSettings = `'wght' ${weight}`;
             el.style.fontSize = fontSizeMap[sizeClass] || '0.875rem';
-            const pos = positions[i] || positions[0];
-            Object.keys(pos).forEach(k => { el.style[k] = pos[k]; });
+            const pos = positions[posIdx] || positions[0];
+            el.style.position = 'absolute';
+            // Stack lines: offset second line slightly below first (decrease gap)
+            if (i % 2 === 0) {
+                el.style.top = `calc(${pos.top} - 0.7rem)`;
+            } else {
+                el.style.top = `calc(${pos.top} + 0.7rem)`;
+            }
+            el.style.left = pos.left;
             el.style.transform = 'translate(-50%, -50%)';
-            // Create stacked lines
-            const a = document.createElement('div');
-            a.textContent = lineA;
-            const b = document.createElement('div');
-            b.textContent = lineB;
-            a.style.lineHeight = '1.1';
-            b.style.lineHeight = '1.1';
-            a.style.textAlign = 'center';
-            b.style.textAlign = 'center';
-            el.appendChild(a);
-            el.appendChild(b);
+            el.textContent = val;
             heroIconsContainer.appendChild(el);
         }
     }
@@ -707,7 +719,7 @@ updateHeroNoteDisplay();
             if (modal && !modal.classList.contains('hidden')) closeModal();
         }
     });
-   // --- Export Functionality ---
+    // --- Export Functionality ---
 // --- Export Functionality (Targeting the Parent Wrapper) ---
     const exportBtn = document.getElementById('export-btn');
     const exportSingleBtn = document.getElementById('export-single-btn');
@@ -1033,7 +1045,7 @@ async function exportCurrentTabSVG() {
     const protocolText = heroProtocol?.textContent?.replace('Protocol: ', '').toLowerCase() || 'protocol';
     
     dl.href = url;
-    dl.download = `matterGlassSeries-${protocolText}-${colorText}.svg`;
+    dl.download = `MatterEgg3gangs-${protocolText}-${colorText}.svg`;
     document.body.appendChild(dl);
     dl.click();
     dl.remove();
@@ -1381,7 +1393,7 @@ async function exportCurrentTabPDF() {
     <div class="header-section d-flex justify-content-between align-items-end">
         <div>
             <img src="src/imgs/KNX STORE_Logo 2.png" alt="KNX Store Logo" style="height: 26px; width: auto; margin-bottom: 6px;">
-            <div style="font-size: 11px; font-weight: 600; color: #1a3a52; margin-top: 4px;">MATTER GLASS SERIES CONFIGURATION</div>
+            <div style="font-size: 11px; font-weight: 600; color: #1a3a52; margin-top: 4px;">MATTER EGG 3 GANGS SERIES CONFIGURATION</div>
         </div>
         <div class="contact-details">
             <div class="d-flex align-items-center gap-1">
@@ -1420,7 +1432,7 @@ async function exportCurrentTabPDF() {
             <div class="specs-box">
                 <div class="spec-row">
                     <div class="spec-label-col"><i class="bi bi-tag-fill"></i> Product</div>
-                    <div class="spec-value-col">Matter Glass Series - Smart Keypad</div>
+                    <div class="spec-value-col">Matter EGG 3 Gangs Series - Smart Keypad</div>
                 </div>
                 <div class="spec-row">
                     <div class="spec-label-col"><i class="bi bi-palette-fill"></i> Color</div>
@@ -1444,20 +1456,14 @@ async function exportCurrentTabPDF() {
             </div>
         </div>  
     </div>
-
         <p class="pt-4" style="font-size: 11px; color: #64748b;">
             Once you have finished your selection, please send both files (PDF and SVG) via
             <a href="https://zalo.me/0918918755" target="_blank" rel="noopener noreferrer">ZALO</a>
             or email:
             <a href="mailto:sales@knxstore.vn">sales@knxstore.vn</a>
         </p>
-
-
     <div class="sheet-footer">
-        
-
         <div>Generated by KNX Store Configurator</div>
-
         <div>ID: <span class="id-code">${generatedId}</span></div>
     </div>
 </div>
@@ -1484,7 +1490,7 @@ async function exportCurrentTabPDF() {
                 const imgWidth = 210;
                 const imgHeight = (iframeCanvas.height * imgWidth) / iframeCanvas.width;
                 pdf.addImage(pdfImgData, 'PNG', 0, 0, imgWidth, imgHeight);
-                pdf.save(`matterGlassSeries-${colorText}-${protocolText}-${generatedId}.pdf`);
+                pdf.save(`MatterEgg3gangs-${colorText}-${protocolText}-${generatedId}.pdf`);
             } else {
                 iframe.contentWindow.print();
             }

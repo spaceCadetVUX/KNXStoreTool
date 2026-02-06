@@ -179,20 +179,41 @@
             </header>
             <main>
                 <div id="main-menu" class="row row-cols-1 row-cols-md-2 g-4 fade-in">
+                    <!-- Matter class -->
                     <div class="col">
                         <div class="mode-card category-card" onclick="showCategory('matter')">
                             <div class="mode-img-wrapper1">
                                 <img
-                                    src="src/imgs/classify/matterClass.jpg"
+                                    src="src/imgs/classify/matter.jpg"
                                     alt="Matter Switch"
                                     class="mode-img-full"
                                 />
                             </div>
                             <div class="card-content">
-                                <h2 class="mode-name">Matter Switch</h2>
+                                <h2 class="mode-name">Matter Switches</h2>
                                 <p class="mode-description">
-                                    Smart matter switches including Jink EGG and Matter Glass Series. Seamless
-                                    integration for modern homes.
+                                    Bao gồm các dòng công tắc thông minh dành riêng cho Matter: EGG, Glass, Aluminium series.
+                                </p>
+                                <div class="action-row">
+                                    Xem chi tiết <span class="arrow-icon">arrow_forward</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Knx class -->
+                    <div class="col">
+                        <div class="mode-card category-card" onclick="showCategory('knx')">
+                            <div class="mode-img-wrapper1">
+                                <img
+                                    src="src/imgs/classify/knx.jpg"
+                                    alt="KNX & Modbus Switch"
+                                    class="mode-img-full"
+                                />
+                            </div>
+                            <div class="card-content">
+                                <h2 class="mode-name">KNX Switches</h2>
+                                <p class="mode-description">
+                                    Công tắc KNX chuẩn quốc tế cho tự động hóa nhà và tòa nhà, tích hợp linh hoạt các chức năng điều khiển chiếu sáng, rèm, điều hòa và ngữ cảnh, độ tin cậy cao.
                                 </p>
                                 <div class="action-row">
                                     View Products <span class="arrow-icon">arrow_forward</span>
@@ -200,21 +221,41 @@
                             </div>
                         </div>
                     </div>
-
+                    <!-- Dali2 class -->
                     <div class="col">
-                        <div class="mode-card category-card" onclick="showCategory('knx')">
+                        <div class="mode-card category-card" onclick="showCategory('Dali2')">
                             <div class="mode-img-wrapper1">
                                 <img
-                                    src="src/imgs/classify/knxClass.jpg"
+                                    src="src/imgs/classify/dali2.jpg"
                                     alt="KNX & Modbus Switch"
                                     class="mode-img-full"
                                 />
                             </div>
                             <div class="card-content">
-                                <h2 class="mode-name">KNX & Modbus Switch</h2>
+                                <h2 class="mode-name">Dali 2 Switches</h2>
                                 <p class="mode-description">
-                                    Professional grade automation switches. Includes Moorgen, Swiss Standard, and
-                                    UIT-IoT series.
+                                    Công tắc chuẩn DALI-2 cho hệ thống chiếu sáng thông minh, điều khiển chính xác, ổn định và tương thích cao với các thiết bị DALI-2 trong tòa nhà và nhà ở cao cấp.
+                                </p>
+                                <div class="action-row">
+                                    View Products <span class="arrow-icon">arrow_forward</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modbus class -->
+                    <div class="col">
+                        <div class="mode-card category-card" onclick="showCategory('Modbus')">
+                            <div class="mode-img-wrapper1">
+                                <img
+                                    src="src/imgs/classify/modbus.jpg"
+                                    alt="KNX & Modbus Switch"
+                                    class="mode-img-full"
+                                />
+                            </div>
+                            <div class="card-content">
+                                <h2 class="mode-name">Modbus Switches</h2>
+                                <p class="mode-description">
+                                    Công tắc sử dụng giao thức Modbus, phù hợp cho hệ thống điều khiển tòa nhà và nhà thông minh, cho phép kết nối ổn định, mở rộng linh hoạt và tích hợp dễ dàng với các bộ điều khiển trung tâm.
                                 </p>
                                 <div class="action-row">
                                     View Products <span class="arrow-icon">arrow_forward</span>
@@ -228,14 +269,16 @@
                         <span class="material-symbols-outlined" style="font-size: 18px">arrow_back</span>
                         Back to Categories
                     </button>
+
                     <div class="row row-cols-1 row-cols-sm-2 row-cols-lg-3 g-4" id="product-grid">
+                        <!-- MATTER -->
                         <div class="col product-item" data-category="matter">
                             <a href="JinkEGG.html" class="mode-card">
                                 <div class="mode-img-wrapper">
                                     <img src="src/jink/eag/Glossy-white.jpg" alt="JinkEGG Switch" class="mode-img" />
                                 </div>
                                 <div class="card-content">
-                                    <h2 class="mode-name">Jink EGG</h2>
+                                    <h2 class="mode-name">EGG Series</h2>
                                     <p class="mode-description">
                                         Experience the seamless Matter integration with elegant design.
                                     </p>
@@ -245,7 +288,49 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col product-item" data-category="knx">
+
+                        <div class="col product-item" data-category="matter">
+                            <a href="EggSeries3gangs.html" class="mode-card">
+                                <div class="mode-img-wrapper">
+                                    <img src="src/jink/egg3gangs/glossyWhite.jpg" alt="JinkEGG Switch" class="mode-img" />
+                                </div>
+                                <div class="card-content">
+                                    <h2 class="mode-name">EGG 3 Gangs Series</h2>
+                                    <p class="mode-description">
+                                        Experience the seamless Matter integration with elegant design.
+                                    </p>
+                                    <div class="action-row">
+                                        Go to Edit <span class="arrow-icon">arrow_forward</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <div class="col product-item" data-category="matter">
+                            <a href="glassSeries.html" class="mode-card">
+                                <div class="mode-img-wrapper">
+                                    <img
+                                        src="src/jink/glass4gang/LiquidSilver.jpg"
+                                        alt="Jink Glass Series"
+                                        class="mode-img"
+                                    />
+                                </div>
+                                <div class="card-content">
+                                    <h2 class="mode-name">Glass Series</h2>
+                                    <p class="mode-description">
+                                       This premium 4-gang Matter smart switch features a sleek glass and aluminium build
+                                    </p>
+                                    <div class="action-row">
+                                        Go to Edit <span class="arrow-icon">arrow_forward</span>
+                                    </div>
+                                </div>
+                            </a>
+                        </div>
+
+                        <!-- MATTER END -->
+
+                        <!-- Modbus -->
+                        <div class="col product-item" data-category="Modbus">
                             <a href="steveLeung.html" class="mode-card">
                                 <div class="mode-img-wrapper">
                                     <img
@@ -265,7 +350,8 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col product-item" data-category="knx">
+
+                        <div class="col product-item" data-category="Modbus">
                             <a href="swiss.html" class="mode-card">
                                 <div class="mode-img-wrapper">
                                     <img
@@ -285,7 +371,12 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col product-item" data-category="knx">
+
+                        <!-- Modbus END  -->
+
+
+                        <!-- Dali2 -->
+                        <div class="col product-item" data-category="Dali2">
                             <a href="uitiotSp312.html" class="mode-card">
                                 <div class="mode-img-wrapper">
                                     <img
@@ -305,7 +396,8 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col product-item" data-category="knx">
+
+                        <div class="col product-item" data-category="Dali2">
                             <a href="uitiotSp3118.html" class="mode-card">
                                 <div class="mode-img-wrapper">
                                     <img
@@ -323,26 +415,8 @@
                                 </div>
                             </a>
                         </div>
-                        <div class="col product-item" data-category="matter">
-                            <a href="glassSeries.html" class="mode-card">
-                                <div class="mode-img-wrapper">
-                                    <img
-                                        src="src/jink/glass4gang/LiquidSilver.jpg"
-                                        alt="Jink Glass Series"
-                                        class="mode-img"
-                                    />
-                                </div>
-                                <div class="card-content">
-                                    <h2 class="mode-name">Jink Glass Series</h2>
-                                    <p class="mode-description">
-                                       This premium 4-gang Matter smart switch features a sleek glass and aluminium build
-                                    </p>
-                                    <div class="action-row">
-                                        Go to Edit <span class="arrow-icon">arrow_forward</span>
-                                    </div>
-                                </div>
-                            </a>
-                        </div>
+                        <!-- Dali2 END -->
+
                     </div>
                 </div>
             </main>

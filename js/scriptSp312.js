@@ -1381,7 +1381,7 @@ async function exportCurrentTabPDF() {
     <div class="header-section d-flex justify-content-between align-items-end">
         <div>
             <img src="src/imgs/KNX STORE_Logo 2.png" alt="KNX Store Logo" style="height: 26px; width: auto; margin-bottom: 6px;">
-            <div style="font-size: 11px; font-weight: 600; color: #1a3a52; margin-top: 4px;">MATTER GLASS SERIES CONFIGURATION</div>
+            <div style="font-size: 11px; font-weight: 600; color: #1a3a52; margin-top: 4px;">DALI 2 UITIOT SP312  CONFIGURATION</div>
         </div>
         <div class="contact-details">
             <div class="d-flex align-items-center gap-1">

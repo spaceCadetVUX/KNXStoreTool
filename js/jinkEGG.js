@@ -1045,7 +1045,7 @@ async function exportCurrentTabSVG() {
     const protocolText = heroProtocol?.textContent?.replace('Protocol: ', '').toLowerCase() || 'protocol';
     
     dl.href = url;
-    dl.download = `matter-${protocolText}-${colorText}.svg`;
+    dl.download = `MatterEgg-${protocolText}-${colorText}.svg`;
     document.body.appendChild(dl);
     dl.click();
     dl.remove();
@@ -1496,7 +1496,7 @@ async function exportCurrentTabPDF() {
                 const imgWidth = 210;
                 const imgHeight = (iframeCanvas.height * imgWidth) / iframeCanvas.width;
                 pdf.addImage(pdfImgData, 'PNG', 0, 0, imgWidth, imgHeight);
-                pdf.save(`matter-${colorText}-${protocolText}-${generatedId}.pdf`);
+                pdf.save(`MatterEgg-${colorText}-${protocolText}-${generatedId}.pdf`);
             } else {
                 iframe.contentWindow.print();
             }
